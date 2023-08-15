@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class ReviewController {
@@ -20,7 +22,26 @@ public class ReviewController {
     }
 
     @PostMapping("/pokemon/{pokemonId}/review")
-    private ResponseEntity<ReviewDto> createReview(@PathVariable(value = "pokemonId") Long pokemonId, @RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<ReviewDto> createReview(@PathVariable(value = "pokemonId") Long pokemonId, @RequestBody ReviewDto reviewDto) {
         return new ResponseEntity<>(reviewService.createReview(pokemonId,reviewDto), HttpStatus.CREATED);
     }
+
+    @GetMapping("/pokemon/{pokemonId}/reviews")
+    public List<ReviewDto> getReviewsByPokemonId(@PathVariable(value = "pokemonId") Long pokemonId) {
+        return reviewService.getReviewByPokemonId(pokemonId);
+    }
+
+    @GetMapping("/pokemon/{pokemonId}/reviews/{reviewId}")
+    public ResponseEntity<ReviewDto> getReviewId(@PathVariable(value = "pokemonId") Long pokemonId, @PathVariable(value = "reviewId") Long reviewId) {
+        ReviewDto reviewDto = reviewService.getReviewById(pokemonId,reviewId);
+        return new ResponseEntity<>(reviewDto, HttpStatus.OK);
+    }
+
+    @PutMapping("/pokemon/{pokemonId}/reviews/{reviewId}")
+    public ResponseEntity<ReviewDto> getReviewId(@PathVariable(value = "pokemonId") Long pokemonId, @PathVariable(value = "reviewId") Long reviewId,@RequestBody ReviewDto reviewDto) {
+        ReviewDto updateReview = reviewService.updateReview(pokemonId,reviewId,reviewDto);
+        return new ResponseEntity<>(updateReview, HttpStatus.OK);
+    }
+
+
 }
