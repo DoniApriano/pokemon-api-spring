@@ -79,6 +79,19 @@ public class ReviewServiceImpl implements ReviewService {
         return mapToDto(updateReview);
     }
 
+    @Override
+    public void deleteReview(Long pokemonId, Long reviewId) {
+        Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new PokemonNotFoundException("Pokemon Id tidak ditemukan"));
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException("Review id tidak ditemukan"));
+
+        if (review.getPokemon().getId() !=pokemon.getId()) {
+            throw new RuntimeException("Review ini tidak dengan pokemon");
+        }
+
+        reviewRepository.delete(review);
+    }
+
     private ReviewDto mapToDto(Review review) {
         ReviewDto reviewDto = new ReviewDto();
 

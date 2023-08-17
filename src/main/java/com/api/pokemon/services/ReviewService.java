@@ -15,4 +15,6 @@ public interface ReviewService {
 
     ReviewDto updateReview(Long pokemonId, Long reviewId, ReviewDto reviewDto);
 
+    void deleteReview(Long pokemonId, Long reviewId);
+
 }
